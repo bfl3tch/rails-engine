@@ -1,10 +1,10 @@
 
 # Schema
-<p align="center"> 
-  <img src="https://user-images.githubusercontent.com/74567704/131948100-b7d231a1-1da4-49a4-bcf4-c1b2e62553b1.png" alt="schema">
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74567704/131949086-49b88944-ed27-4b15-824c-432c3c9546dd.png" alt="schema">
 </p>
 
-# ReadMe 
+# ReadMe
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
