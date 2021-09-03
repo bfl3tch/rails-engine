@@ -1,3 +1,3 @@
 class Item < ApplicationRecord
-  belongs_to :merchant_id
+  belongs_to :merchant
 end
