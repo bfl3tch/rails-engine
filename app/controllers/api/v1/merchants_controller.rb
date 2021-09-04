@@ -5,4 +5,10 @@ class Api::V1::MerchantsController < ApplicationController
     merchants = Merchant.all.limit(per_page).offset(page)
     render json: MerchantSerializer.new(merchants)
   end
+
+  def show
+    merchant = Merchant.find_by_id(params[:id])
+    render json: MerchantSerializer.new(merchant) if merchant
+    raise ActiveRecord::RecordNotFound if merchant.nil?
+  end
 end
