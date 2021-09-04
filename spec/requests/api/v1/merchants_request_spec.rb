@@ -22,7 +22,6 @@ RSpec.describe "Merchants API" do
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
-        expect(merchants.class).to eq(Hash)
         expect(merchants["data"].count).to eq(20)
       end
     end
@@ -36,7 +35,6 @@ RSpec.describe "Merchants API" do
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
-        expect(merchants.class).to eq(Hash)
         expect(merchants["data"].count).to eq(25)
       end
 
@@ -48,7 +46,6 @@ RSpec.describe "Merchants API" do
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
-        expect(merchants.class).to eq(Hash)
         expect(merchants["data"].count).to eq(30)
 
       end
@@ -63,7 +60,6 @@ RSpec.describe "Merchants API" do
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
-        expect(merchants.class).to eq(Hash)
         expect(merchants["data"].count).to eq(20)
       end
 
@@ -75,7 +71,6 @@ RSpec.describe "Merchants API" do
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
-        expect(merchants.class).to eq(Hash)
         expect(merchants["data"].count).to eq(10)
       end
 
@@ -87,7 +82,6 @@ RSpec.describe "Merchants API" do
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
-        expect(merchants.class).to eq(Hash)
         expect(merchants["data"].count).to eq(0)
 
       end
@@ -114,7 +108,6 @@ RSpec.describe "Merchants API" do
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
-        expect(merchants.class).to eq(Hash)
         expect(merchants["data"].count).to eq(10)
       end
 
@@ -126,8 +119,30 @@ RSpec.describe "Merchants API" do
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
-        expect(merchants.class).to eq(Hash)
         expect(merchants["data"].count).to eq(30)
+      end
+    end
+  end
+
+  describe 'show request' do
+    context 'happy path' do
+      it 'returns the requested merchant' do
+        merchant = Merchant.create!(name: 'Kramer')
+
+        get "/api/v1/merchants/#{merchant.id}"
+
+        merchant = JSON.parse(response.body)
+        expect(response).to be_successful
+        expect(merchant["data"]["attributes"]["name"]).to eq("Kramer")
+      end
+    end
+
+    context 'sad path' do
+      it 'responds to bad queries with a 404' do
+        merchant = Merchant.create!(name: 'Kramer')
+
+        expect { get "/api/v1/merchants/#{merchant.id - 1}" }.to raise_error(ActiveRecord::RecordNotFound)
+
       end
     end
   end
