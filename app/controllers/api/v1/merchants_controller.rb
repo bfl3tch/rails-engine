@@ -1,7 +1,5 @@
 class Api::V1::MerchantsController < ApplicationController
   before_action :set_merchant, only: [:show]
-  include Response
-  include ExceptionHandler
 
   def index
     per_page = MerchantsFacade.per_page(params[:per_page])
