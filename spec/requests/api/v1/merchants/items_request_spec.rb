@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Merchant Items API" do
   describe 'index request' do
     context 'happy path' do
-      it 'sends a list of all merchants' do
+      it 'sends a list of all items belonging to the merchant' do
         merchant = create(:merchant, id: 1)
         item1 = create(:item, merchant: merchant)
         item2 = create(:item, merchant: merchant)
@@ -24,8 +24,8 @@ RSpec.describe "Merchant Items API" do
         item2 = create(:item, merchant: merchant)
         item3 = create(:item, merchant: merchant)
 
-
         get '/api/v1/merchants/2/items'
+
         expect(response.status).to eq(404)
       end
     end
