@@ -140,9 +140,11 @@ RSpec.describe "Merchants API" do
     context 'sad path' do
       it 'responds to bad queries with a 404' do
         merchant = Merchant.create!(name: 'Kramer')
+        
+        get "/api/v1/merchants/#{merchant.id + 1}"
 
-        expect { get "/api/v1/merchants/#{merchant.id - 1}" }.to raise_error(ActiveRecord::RecordNotFound)
-
+        expect(response.body).to include("No merchant found with that ID")
+        expect(response.status).to eq(404)
       end
     end
   end

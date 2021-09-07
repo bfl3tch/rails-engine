@@ -21,14 +21,12 @@ RSpec.describe Merchant, type: :model do
         expect(Merchant.fetch_requested_merchants(50, 0).count).to eq(50)
       end
     end
-  end
 
-  describe 'instance methods' do
-    describe '#fetch_merchant_items' do
+    describe '::fetch_merchant_items' do
       it 'returns all items belonging to the merchant' do
         merchant = create(:merchant)
         item = create(:item, merchant: merchant)
-        expect(merchant.fetch_merchant_items).to eq(item)
+        expect(Merchant.fetch_merchant_items(merchant)).to eq([item])
       end
 
       it 'doesnt return items from another merchant' do
@@ -37,11 +35,11 @@ RSpec.describe Merchant, type: :model do
 
         item1 = create(:item, merchant: merchant1)
         item2 = create(:item, merchant: merchant2)
+        item3 = create(:item, merchant: merchant1)
 
-        expect(merchant1.fetch_merchant_items).not_to eq(item2)
-        expect(merchant2.fetch_merchant_items).not_to eq(item1)
+        expect(Merchant.fetch_merchant_items(merchant1)).not_to eq([item2])
+        expect(Merchant.fetch_merchant_items(merchant2)).not_to eq([item1, item3])
       end
-
     end
   end
 end
