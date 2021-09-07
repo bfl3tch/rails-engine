@@ -131,6 +131,17 @@ RSpec.describe "Items API" do
         expect(response).to be_successful
         expect(items["data"].count).to eq(30)
       end
+
+      it 'sents a list of less than 20 back if its requested' do
+        merchant = create(:merchant)
+        create_list(:item, 21, merchant: merchant)
+        get '/api/v1/items?per_page=10&page=1'
+
+        items = JSON.parse(response.body)
+
+        expect(response).to be_successful
+        expect(items["data"].count).to eq(10)
+      end
     end
   end
 
@@ -157,6 +168,165 @@ RSpec.describe "Items API" do
 
         expect(response.body).to include('No item found with that ID')
         expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe 'create request' do
+    context 'happy path' do
+      it 'creates an item and saves it to the database' do
+        create(:merchant, id: 1)
+        item_params =
+          (
+            {
+            name: "Fake new item",
+            description: "Bunch of latin words and stuff",
+            unit_price: 670.76,
+            merchant_id: 1
+            }
+          )
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        expect(Item.all.count).to eq(0)
+        post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+        expect(response.status).to eq(201)
+        expect(Item.all.count).to eq(1)
+        expect(Item.all.last.name).to eq("Fake new item")
+        expect(Item.all.last.merchant_id).to eq(1)
+      end
+    end
+
+    context 'sad path' do
+      it 'gives a 400 bad request error if bad/missing attributes' do
+        create(:merchant, id: 1)
+        item_params =
+          (
+            {
+            name: "Fake new item",
+            description: "Bunch of latin words and stuff",
+            unit_price: 670.76,
+            merchant_id: 0
+            }
+          )
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        expect(Item.all.count).to eq(0)
+        post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+        expect(response.status).to eq(400)
+        expect(Item.all.count).to eq(0)
+      end
+    end
+  end
+
+  describe 'update request' do
+    context 'happy path' do
+      it 'updates the requested item' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant, name: 'Poolstick')
+        item_params =
+          (
+            {
+              id: item.id,
+              name: "Fake new item",
+              description: "Bunch of latin words and stuff",
+              unit_price: 670.76,
+              merchant_id: merchant.id
+            }
+          )
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        put "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: item_params)
+
+        updated_item = JSON.parse(response.body)
+
+        expect(response).to be_successful
+        expect(updated_item['data']['id'].to_i).to eq(item.id)
+        expect(updated_item['data']['attributes']['name']).to eq("Fake new item")
+      end
+
+      it 'allows overwrites without the merchant id present' do
+        merchant = create(:merchant, id: 1)
+        merchant2 = create(:merchant, id: 2)
+        item = create(:item, id: 1, merchant: merchant, name: 'Poolstick')
+        item_params =
+          (
+            {
+              name: "Fake new item",
+            }
+          )
+        headers = {"CONTENT_TYPE" => "application/json"}
+        # require "pry"; binding.pry
+        put "/api/v1/items/1", headers: headers, params: JSON.generate(item: item_params)
+
+        updated_item = JSON.parse(response.body)
+
+        expect(response).to be_successful
+        expect(updated_item['data']['id'].to_i).to eq(item.id)
+        expect(updated_item['data']['attributes']['name']).to eq("Fake new item")
+      end
+    end
+
+    context 'sad path' do
+      it 'responds to bad queries with a 404' do
+        merchant = create(:merchant)
+        item = create(:item, id: 1, merchant: merchant, name: 'Poolstick')
+        item_params =
+          (
+            {
+              id: 1,
+              name: "Fake new item",
+              description: "Bunch of latin words and stuff",
+              unit_price: 670.76,
+              merchant_id: merchant.id
+            }
+          )
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        put "/api/v1/items/2", headers: headers, params: JSON.generate(item: item_params)
+        expect(response.body).to include('No item found with that ID')
+        expect(response.status).to eq(404)
+      end
+
+      it 'responds to bad merchant id overwrites with a 404' do
+        merchant = create(:merchant, id: 1)
+        merchant2 = create(:merchant, id: 2)
+        item = create(:item, id: 1, merchant: merchant, name: 'Poolstick')
+        item_params =
+          (
+            {
+              id: 1,
+              name: "Fake new item",
+              description: "Bunch of latin words and stuff",
+              unit_price: 670.76,
+              merchant_id: 3
+            }
+          )
+        headers = {"CONTENT_TYPE" => "application/json"}
+        # require "pry"; binding.pry
+        put "/api/v1/items/2", headers: headers, params: JSON.generate(item: item_params)
+        expect(response.body).to include("Merchant ID must match an existing Merchant")
+        expect(response.status).to eq(404)
+      end
+
+
+    end
+  end
+
+  describe 'destroy request' do
+    context 'happy path' do
+      it 'deletes the specified item' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant)
+
+        expect(Item.count).to eq(1)
+
+        delete "/api/v1/items/#{item.id}"
+
+        expect(response).to be_successful
+        expect(Item.count).to eq(0)
+        expect{ Item.find(item.id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

@@ -7,8 +7,6 @@ class Api::V1::Merchants::ItemsController < ApplicationController
     items = MerchantItemsFacade.fetch_merchant_items(@merchant)
     json_response(ItemSerializer.new(items), status) if @merchant
     json_response({error: 'No merchant with that ID found'}, :not_found) if @merchant.nil?
-    # raise ActiveRecord::RecordNotFound if @merchant.nil?
-
   end
 
   private
