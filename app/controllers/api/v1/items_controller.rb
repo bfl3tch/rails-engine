@@ -21,7 +21,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update
-    @item ? json_response(ItemSerializer.new(@item), :created) : json_response(ErrorItemSerializer.new(@error_item), :not_found)
+    @error_item ? json_response(ErrorItemSerializer.new(@error_item), :not_found) : json_response(ItemSerializer.new(@item), :created)
     # json_response(ItemSerializer.new(@item), :created) :  if @item
     # json_response(ErrorItemSerializer.new(@error_item), :not_found)
   end
@@ -44,21 +44,23 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update_item
-    # require "pry"; binding.pry
-    @good_merchant = Merchant.where(id: item_params['merchant_id'])
-    # require "pry"; binding.pry
-    if @item && @good_merchant
+    @unfound_merchant = []
+    @unfound_merchant << Merchant.find_by_id(item_params['merchant_id'])
+    if @item && @unfound_merchant.empty?
       @item.update(item_params)
-    # elsif @item && !item_params['merchant_id']
-  elsif @item && @good_merchant.empty?
-      @item.update(item_params)
+    elsif @item && !@unfound_merchant.empty?
+      @item.update(update_item_params)
     else
+      @error_item = ErrorItem.new("Merchant ID must match an existing Merchant")
       @error_item = ErrorItem.new("No item found with that ID") if @item.nil?
-      @error_item = ErrorItem.new("Merchant ID must match an existing Merchant") if @good_merchant.empty?
     end
   end
 
   def item_params
     params.require(:item).permit(:id, :name, :description, :unit_price, :merchant_id)
+  end
+
+  def update_item_params
+    params.require(:item).permit(:id, :name, :description, :unit_price)
   end
 end
