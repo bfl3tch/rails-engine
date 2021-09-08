@@ -10,4 +10,8 @@ class ItemsFacade
   def self.fetch_requested_items(per_page, page)
     Item.fetch_requested_items(per_page, page)
   end
+
+  def self.item_search(name)
+    Item.case_insensitive_search(name)
+  end
 end
