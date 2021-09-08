@@ -10,7 +10,7 @@ class Api::V1::Items::FindController < ApplicationController
   private
 
   def set_item
-    name = params[:name] if params[:name]
+    name = params[:name] if (params[:name] && params[:name] != "")
     min = params[:min_price].to_i if params[:min_price]
     max = params[:max_price].to_i if params[:max_price]
 
