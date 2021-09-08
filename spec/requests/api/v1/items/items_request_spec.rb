@@ -51,7 +51,6 @@ RSpec.describe "Items API" do
 
         expect(response).to be_successful
         expect(items["data"].count).to eq(30)
-
       end
     end
 
@@ -90,7 +89,6 @@ RSpec.describe "Items API" do
 
         expect(response).to be_successful
         expect(items["data"].count).to eq(0)
-
       end
     end
 
@@ -266,6 +264,28 @@ RSpec.describe "Items API" do
         expect(updated_item['data']['id'].to_i).to eq(item.id)
         expect(updated_item['data']['attributes']['name']).to eq("Fake new item")
       end
+
+      it 'allows overwrites without the merchant id present' do
+        merchant = create(:merchant, id: 1)
+        merchant2 = create(:merchant, id: 2)
+        item = create(:item, id: 1, merchant: merchant, name: 'Poolstick')
+        item_params =
+          (
+            {
+              name: "Fake new item",
+              merchant_id: 3
+            }
+          )
+        headers = {"CONTENT_TYPE" => "application/json"}
+        # require "pry"; binding.pry
+        put "/api/v1/items/1", headers: headers, params: JSON.generate(item: item_params)
+
+        updated_item = JSON.parse(response.body)
+
+        expect(response).to be_successful
+        expect(updated_item['data']['id'].to_i).to eq(item.id)
+        expect(updated_item['data']['attributes']['name']).to eq("Fake new item")
+      end
     end
 
     context 'sad path' do
@@ -289,7 +309,7 @@ RSpec.describe "Items API" do
         expect(response.status).to eq(404)
       end
 
-      it 'responds to bad merchant id overwrites with a 404' do
+      xit 'responds to bad merchant id overwrites with a 404' do
         merchant = create(:merchant, id: 1)
         merchant2 = create(:merchant, id: 2)
         item = create(:item, id: 1, merchant: merchant, name: 'Poolstick')
@@ -304,13 +324,11 @@ RSpec.describe "Items API" do
             }
           )
         headers = {"CONTENT_TYPE" => "application/json"}
-        # require "pry"; binding.pry
+
         put "/api/v1/items/2", headers: headers, params: JSON.generate(item: item_params)
         expect(response.body).to include("Merchant ID must match an existing Merchant")
         expect(response.status).to eq(404)
       end
-
-
     end
   end
 
