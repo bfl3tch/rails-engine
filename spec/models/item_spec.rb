@@ -26,11 +26,118 @@ RSpec.describe Item, type: :model do
       end
     end
 
-    describe '#fetch_item' do
+    describe '::case_sensitive_search' do
+      it 'searches case insenitively through items to get the first best response' do
+        merchant = create(:merchant)
+        item1 = create(:item, name: "basket", merchant: merchant)
+        item2 = create(:item, name: "base", merchant: merchant)
+        item3 = create(:item, name: "footBALL", merchant: merchant)
+        item4 = create(:item, name: "tennis bAlL", merchant: merchant)
+
+        expect(Item.case_insensitive_search("ball")).to eq(item3)
+      end
+
+      it 'searches through descriptions as well as names' do
+        merchant = create(:merchant)
+        item1 = create(:item, name: "basket", merchant: merchant)
+        item2 = create(:item, name: "baseball", merchant: merchant)
+        item3 = create(:item, name: "desk", description: 'wish this was a ballerina', merchant: merchant)
+        item4 = create(:item, name: "Beer", description: 'wish this was a bALL of fun', merchant: merchant)
+
+        expect(Item.case_insensitive_search("bAlL")).to eq(item2)
+      end
+
+      it 'orders the items alphabetically that match the search results' do
+        merchant = create(:merchant)
+        item1 = create(:item, name: "Compasket", merchant: merchant)
+        item2 = create(:item, name: "Basket", merchant: merchant)
+        item3 = create(:item, name: "Fasket", description: 'wish this was a ballerina', merchant: merchant)
+        item4 = create(:item, name: "Dasket", description: 'wish this was a bALL of fun', merchant: merchant)
+        item5 = create(:item, name: "basket", description: 'wish this was a bALL of fun', merchant: merchant)
+        item6 = create(:item, name: "wrong", description: 'wish this was a bALL of fun', merchant: merchant)
+
+        expect(Item.case_insensitive_search("asket")).to eq(item2)
+      end
+
+      it 'returns nil if nothing is found' do
+        merchant = create(:merchant)
+        item1 = create(:item, name: "Compasket", merchant: merchant)
+
+        expect(Item.case_insensitive_search("n")).to eq(nil)
+      end
+    end
+
+    describe '::fetch_item' do
       it 'returns the requested item' do
         merchant = create(:merchant)
         item = create(:item, merchant: merchant)
         expect(Item.fetch_item(item)).to eq(item)
+      end
+    end
+
+    describe '::search_via_min_price' do
+      it 'returns the requested item inclusive ordered by name' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant, unit_price: 3, name: 'bob')
+        item2 = create(:item, merchant: merchant, unit_price: 3, name: 'cob')
+        expect(Item.search_via_min_price(3)).to eq(item)
+      end
+
+      it 'returns nil if price is above any items' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant, unit_price: 3)
+        expect(Item.search_via_min_price(3.1)).to eq(nil)
+      end
+    end
+
+    describe '::search_via_max_price' do
+      it 'returns the first requested item inclusive of price ordered by name' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant, unit_price: 3, name: 'bob')
+        item2 = create(:item, merchant: merchant, unit_price: 3, name: 'cob')
+        expect(Item.search_via_max_price(3)).to eq(item)
+      end
+
+      it 'returns nil if price is above any items' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant, unit_price: 3)
+        expect(Item.search_via_max_price(2)).to eq(nil)
+      end
+    end
+
+    describe '::search_via_both_prices' do
+      it 'returns the first requested item inclusive of prices ordered by name' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant, unit_price: 3, name: 'bob')
+        item2 = create(:item, merchant: merchant, unit_price: 5, name: 'cob')
+        expect(Item.search_via_both_prices(2,4)).to eq(item)
+      end
+
+      it 'returns the first requested item inclusive of prices ordered by name' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant, unit_price: 1, name: 'bob')
+        item2 = create(:item, merchant: merchant, unit_price: 5, name: 'cob')
+        expect(Item.search_via_both_prices(1,4)).to eq(item)
+      end
+
+      it 'returns the first requested item inclusive of prices ordered by name' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant, unit_price: 5, name: 'bob')
+        item2 = create(:item, merchant: merchant, unit_price: 5, name: 'cob')
+        expect(Item.search_via_both_prices(1,5)).to eq(item)
+      end
+
+      it 'returns the first requested item inclusive of prices ordered by name' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant, unit_price: 3, name: 'lower in alphabet')
+        item2 = create(:item, merchant: merchant, unit_price: 3, name: 'higher in alphabet')
+        expect(Item.search_via_both_prices(1,5)).to eq(item2)
+      end
+
+      it 'returns nil if price is above any items' do
+        merchant = create(:merchant)
+        item = create(:item, merchant: merchant, unit_price: 3)
+        expect(Item.search_via_both_prices(1,2)).to eq(nil)
       end
     end
   end
