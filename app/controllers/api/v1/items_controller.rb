@@ -44,17 +44,14 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update_item
-    found_merchant = Merchant.find_by_id(item_params['merchant_id'])
+    @found_merchant = Merchant.find_by_id(item_params['merchant_id']) if item_params['merchant_id']
 
-    found_merchant.nil? ? [] : found_merchant
-
-    if @item && (@unfound == [])
-      @item.update(item_params) if (@item && found_merchant != [])
-    elsif @item && (@unfound != [])
-      @item.update(item_params)
+    if (@found_merchant || item_params['merchant_id'].nil?)
+      @item.update(item_params) if @item
+    elsif (@found_merchant.nil? && !item_params['merchant_id'].nil?)
+      @error_item = ErrorItem.new("Merchant ID must match an existing Merchant") if @item
     else
-      @error_item = ErrorItem.new("Merchant ID must match an existing Merchant")
-      @error_item = ErrorItem.new("No item found with that ID") if @item.nil?
+      @error_item = ErrorItem.new("No item found with that ID")
     end
   end
 

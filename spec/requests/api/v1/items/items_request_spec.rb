@@ -309,7 +309,7 @@ RSpec.describe "Items API" do
         expect(response.status).to eq(404)
       end
 
-      xit 'responds to bad merchant id overwrites with a 404' do
+      it 'responds to bad merchant id overwrites with a 404' do
         merchant = create(:merchant, id: 1)
         merchant2 = create(:merchant, id: 2)
         item = create(:item, id: 1, merchant: merchant, name: 'Poolstick')
@@ -320,12 +320,12 @@ RSpec.describe "Items API" do
               name: "Fake new item",
               description: "Bunch of latin words and stuff",
               unit_price: 670.76,
-              merchant_id: 3
+              merchant_id: 54654154574
             }
           )
         headers = {"CONTENT_TYPE" => "application/json"}
 
-        put "/api/v1/items/2", headers: headers, params: JSON.generate(item: item_params)
+        put "/api/v1/items/1", headers: headers, params: JSON.generate(item: item_params)
         expect(response.body).to include("Merchant ID must match an existing Merchant")
         expect(response.status).to eq(404)
       end
