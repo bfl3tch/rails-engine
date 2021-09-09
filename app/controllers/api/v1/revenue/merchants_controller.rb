@@ -1,22 +1,29 @@
 class Api::V1::Revenue::MerchantsController < ApplicationController
-  # before_action :set_merchant, only: [:show]
+  before_action :get_revenue, only: [:index]
+  before_action :set_merchant, only: [:show]
 
   def index
-  #   per_page = MerchantsFacade.per_page(params[:per_page])
-  #   page = MerchantsFacade.page(params[:page])
-  #   merchants = MerchantsFacade.fetch_requested_merchants(per_page, page)
-  #   json_response(MerchantSerializer.new(merchants), status)
+    json_response(MerchantNameRevenueSerializer.new(@results)) if @results
+    json_response(ErrorSerializer.new(@error_merchant), :bad_request) if @results.nil?
   end
-  #
-  # def show
-  #   json_response(MerchantSerializer.new(@merchant), status) if @merchant
-  #   json_response(ErrorMerchantSerializer.new(@error_merchant), :not_found) if @merchant.nil?
-  # end
-  #
-  # private
-  #
-  # # def set_merchant
-  #   @merchant = Merchant.find_by_id(params[:id])
-  #   @error_merchant = ErrorMerchant.new("No merchant found with that ID") if @merchant.nil?
-  # end
+
+  def show
+    json_response(MerchantRevenueSerializer.new(@merchant)) if @merchant
+    json_response(ErrorMerchantSerializer.new(@error_merchant), :not_found) if @merchant.nil?
+  end
+
+  private
+
+  def get_revenue
+    limit = params[:quantity].to_i if params[:quantity]
+    search = limit if (limit && limit > 0)
+    @results = Merchant.most_revenue(search) if search
+    @error_merchant = ErrorMerchant.new("Quantity Required") if @results.nil?
+  end
+
+  def set_merchant
+    @merchant = Merchant.find(params[:id])
+    # @merchant = merchant.merchant_revenue if merchant
+    @error_merchant = ErrorMerchant.new("No merchant found with that ID") if @merchant.nil?
+  end
 end
