@@ -19,22 +19,23 @@ class Merchant < ApplicationRecord
     where("lower(name) ILIKE ?", "%#{search.downcase}%").order(:name)
   end
 
-  def self.merchant_revenue(merchant_id)
-     joins(:transactions)
-    .joins(:invoice_items)
-    .joins(:invoices)
-    .select("merchants.id as id, merchants.name as name, sum(invoice_items.quantity * invoice_items.unit_price) as revenue")
-    .where("merchants.id = ?", "#{merchant_id}")
-    .group(:name, :id)
+  def merchant_revenue
+    self.invoices.joins(:invoice_items)
+    .joins(:transactions)
+    .select("sum(invoice_items.quantity * invoice_items.unit_price) as revenue")
+    .where("transactions.result = ?", 'success')
+    .where("invoices.status = ?", 'shipped')
+    .sum("invoice_items.quantity * invoice_items.unit_price")
   end
 
-  def self.most_revenue
-     joins(:transactions)
-    .joins(:invoice_items)
-    .select("merchants.id as id, merchants.name as name, sum(invoice_items.quantity * invoice_items.unit_price) as revenue")
+  def self.most_revenue(quantity)
+    select("merchants.name, merchants.id, sum(invoice_items.quantity * invoice_items.unit_price) as revenue")
+    .joins(invoices: :invoice_items)
+    .joins(invoices: :transactions)
+    .where("transactions.result = ?", 'success')
+    .where("invoices.status = ?", 'shipped')
     .group(:name, :id)
     .order(revenue: :desc)
-    .where("invoices.status = ?", 'shipped')
-    .where("transactions.result = ?", 'success')
+    .limit(quantity)
   end
 end
