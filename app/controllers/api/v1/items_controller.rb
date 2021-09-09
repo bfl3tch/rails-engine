@@ -19,7 +19,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update
-    @error_item ? json_response(ErrorItemSerializer.new(@error_item), :not_found) : json_response(ItemSerializer.new(@item), :created)
+    @error_item.nil? ? json_response(ItemSerializer.new(@item), :created) : json_response(ErrorItemSerializer.new(@error_item), :not_found)
   end
 
   def destroy
