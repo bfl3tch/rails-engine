@@ -65,5 +65,59 @@ RSpec.describe Merchant, type: :model do
         expect(Merchant.fetch_merchant_items(merchant2)).not_to eq([item1, item3])
       end
     end
+
+    describe '::merchant_revenue' do
+      it 'returns the revenue for one merchant' do
+        merchant_1 = create(:merchant)
+
+        customer_1 = create(:customer)
+        customer_2 = create(:customer)
+        customer_3 = create(:customer)
+
+        item_1 = create(:item, merchant: merchant_1)
+        item_2 = create(:item, merchant: merchant_1)
+
+        invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1, status: 'shipped')
+
+        invoice_item_1 = create(:invoice_item, item: item_1, invoice: invoice_1, quantity: 15, unit_price: 1)
+        invoice_item_2 = create(:invoice_item, item: item_2, invoice: invoice_1, quantity: 20, unit_price: 2)
+
+        transaction_1 = create(:transaction, invoice: invoice_1, result: 'success')
+        transaction_2 = create(:transaction, invoice: invoice_2, result: 'success')
+        transaction_3 = create(:transaction, invoice: invoice_3, result: 'success')
+
+        expect(Merchant.merchant_revenue(merchant_1.id)).to eq([55)
+      end
+    end
+
+    describe '::most_revenue' do
+      it 'returns the merchants ordered by revenue descending' do
+        merchant1 = create(:merchant)
+        merchant2 = create(:merchant)
+        merchant3 = create(:merchant)
+
+        customer_1 = create(:customer)
+        customer_2 = create(:customer)
+        customer_3 = create(:customer)
+
+        item_1 = create(:item, merchant: merchant_1)
+        item_2 = create(:item, merchant: merchant_2)
+        item_3 = create(:item, merchant: merchant_3)
+
+        invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1, status: 'shipped')
+        invoice_2 = create(:invoice, merchant: merchant_2, customer: customer_2, status: 'shipped')
+        invoice_3 = create(:invoice, merchant: merchant_3, customer: customer_3, status: 'shipped')
+
+        invoice_item_1 = create(:invoice_item, item: item_1, invoice: invoice_1, quantity: 12, unit_price: 1)
+        invoice_item_2 = create(:invoice_item, item: item_2, invoice: invoice_2, quantity: 20, unit_price: 2)
+        invoice_item_3 = create(:invoice_item, item: item_3, invoice: invoice_3, quantity: 10, unit_price: 3)
+
+        transaction_1 = create(:transaction, invoice: invoice_1, result: 'success')
+        transaction_2 = create(:transaction, invoice: invoice_2, result: 'success')
+        transaction_3 = create(:transaction, invoice: invoice_3, result: 'success')
+
+        expect(Merchant.most_revenue).to eq([merchant1, merchant3, merchant2, merchant4])
+      end
+    end
   end
 end
