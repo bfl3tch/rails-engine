@@ -112,10 +112,10 @@ RSpec.describe Merchant, type: :model do
     end
 
     describe '::most_revenue' do
-      xit 'returns the merchants ordered by revenue descending' do
-        merchant1 = create(:merchant)
-        merchant2 = create(:merchant)
-        merchant3 = create(:merchant)
+      it 'returns the merchants ordered by revenue descending' do
+        merchant_1 = create(:merchant)
+        merchant_2 = create(:merchant)
+        merchant_3 = create(:merchant)
 
         customer_1 = create(:customer)
         customer_2 = create(:customer)
@@ -137,7 +137,7 @@ RSpec.describe Merchant, type: :model do
         transaction_2 = create(:transaction, invoice: invoice_2, result: 'success')
         transaction_3 = create(:transaction, invoice: invoice_3, result: 'success')
 
-        expect(Merchant.most_revenue).to eq([merchant1, merchant3, merchant2, merchant4])
+        expect(Merchant.most_revenue).to eq([merchant_2, merchant_3, merchant_1])
       end
     end
   end
