@@ -9,4 +9,8 @@ class Merchant < ApplicationRecord
   def self.fetch_merchant_items(merchant)
     Merchant.find_by_id(merchant.id).items if merchant
   end
+
+  def self.find_by_name(search)
+    where("lower(name) ILIKE ?", "%#{search.downcase}%").order(:name)
+  end
 end

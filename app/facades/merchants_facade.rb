@@ -10,4 +10,8 @@ class MerchantsFacade
   def self.fetch_requested_merchants(per_page, page)
     Merchant.fetch_requested_merchants(per_page, page)
   end
+
+  def self.search_by_name(search)
+    Merchant.find_by_name(search)
+  end
 end
