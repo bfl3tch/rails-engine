@@ -18,5 +18,4 @@ class MerchantsFacade
   def self.most_revenue_ranked(search)
     Merchant.most_revenue(search)
   end
-
 end

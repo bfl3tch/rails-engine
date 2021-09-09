@@ -3,8 +3,7 @@ class Api::V1::Revenue::MerchantsController < ApplicationController
   before_action :set_merchant, only: [:show]
 
   def index
-    json_response(MerchantNameRevenueSerializer.new(@results)) if @results
-    json_response(ErrorSerializer.new(@error_merchant), :bad_request) if @results.nil?
+    @results ? json_response(MerchantNameRevenueSerializer.new(@results)) : json_response(ErrorSerializer.new(@error_merchant), :bad_request)
   end
 
   def show
