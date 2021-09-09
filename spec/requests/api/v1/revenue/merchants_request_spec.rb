@@ -32,6 +32,5 @@ RSpec.describe 'Revenue Merchants Controller' do
         expect(response).to_not be_successful
       end
     end
-    end
   end
 end
