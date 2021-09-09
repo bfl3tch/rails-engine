@@ -7,8 +7,6 @@ class Api::V1::Items::FindController < ApplicationController
     json_response(UnfoundItemSerializer.new(@bad_item), :bad_request) if @item.nil? && @error_item.nil?
   end
 
-  def show
-  end
 # distinguish between nil items
 # helper method to differentiate
 # query param not being valid is different than a search returning nothing
