@@ -9,7 +9,6 @@ class Api::V1::Revenue::MerchantsController < ApplicationController
 
   def show
     json_response(MerchantRevenueSerializer.new(@merchant)) if @merchant
-    json_response(ErrorMerchantSerializer.new(@error_merchant), :not_found) if @merchant.nil?
   end
 
   private
@@ -17,13 +16,14 @@ class Api::V1::Revenue::MerchantsController < ApplicationController
   def get_revenue
     limit = params[:quantity].to_i if params[:quantity]
     search = limit if (limit && limit > 0)
-    @results = Merchant.most_revenue(search) if search
+    @results = MerchantsFacade.most_revenue_ranked(search) if search
     @error_merchant = ErrorMerchant.new("Quantity Required") if @results.nil?
   end
 
   def set_merchant
     @merchant = Merchant.find(params[:id])
-    # @merchant = merchant.merchant_revenue if merchant
+  rescue ActiveRecord::RecordNotFound
     @error_merchant = ErrorMerchant.new("No merchant found with that ID") if @merchant.nil?
+    json_response(ErrorMerchantSerializer.new(@error_merchant), :not_found) if @error_merchant
   end
 end
