@@ -265,7 +265,7 @@ RSpec.describe "Items API" do
         expect(updated_item['data']['attributes']['name']).to eq("Fake new item")
       end
 
-      it 'allows overwrites without the merchant id present' do
+      it 'renders a 404 error if the user tries to change the merchant id to one that doesnt exist' do
         merchant = create(:merchant, id: 1)
         merchant2 = create(:merchant, id: 2)
         item = create(:item, id: 1, merchant: merchant, name: 'Poolstick')
@@ -282,9 +282,8 @@ RSpec.describe "Items API" do
 
         updated_item = JSON.parse(response.body)
 
-        expect(response).to be_successful
-        expect(updated_item['data']['id'].to_i).to eq(item.id)
-        expect(updated_item['data']['attributes']['name']).to eq("Fake new item")
+        expect(response).to_not be_successful
+        expect(response.status).to eq(404)
       end
     end
 
