@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Merchants API" do
+RSpec.describe "Merchants" do
   describe 'index request' do
     context 'no query params' do
       it 'sends a list of all merchants' do
@@ -122,7 +122,7 @@ RSpec.describe "Merchants API" do
 
         get "/api/v1/merchants/#{merchant.id}"
         merchant = JSON.parse(response.body)
-        
+
         expect(response).to be_successful
         expect(merchant["data"]["attributes"]["name"]).to eq("Kramer")
       end

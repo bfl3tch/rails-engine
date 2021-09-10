@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Item Find API" do
+RSpec.describe "Item Find" do
   describe 'index request' do
     it 'searches through the items case sensitively' do
       merchant = create(:merchant, id: 1)
@@ -140,7 +140,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
       create(:item, name: "fsomething", merchant: merchant, unit_price: 3)
-      
+
       get '/api/v1/items/find?name=something&min_price=2&max_price=4'
 
       expect(response).to_not be_successful

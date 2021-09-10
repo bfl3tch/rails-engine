@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Items API" do
+RSpec.describe "Items" do
   describe 'index request' do
     context 'no query params' do
       it 'sends a list of all items' do
@@ -313,7 +313,7 @@ RSpec.describe "Items API" do
         headers = {"CONTENT_TYPE" => "application/json"}
 
         put "/api/v1/items/1", headers: headers, params: JSON.generate(item: item_params)
-        
+
         expect(response.body).to include("Merchant ID must match an existing Merchant")
         expect(response.status).to eq(404)
       end

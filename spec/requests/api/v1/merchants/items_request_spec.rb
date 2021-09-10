@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Merchant Items API" do
+RSpec.describe "Merchant Items" do
   describe 'index request' do
     context 'happy path' do
       it 'sends a list of all items belonging to the merchant' do

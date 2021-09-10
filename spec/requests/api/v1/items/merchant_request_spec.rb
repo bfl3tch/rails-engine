@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Item Merchant API" do
+RSpec.describe "Item Merchant" do
   describe 'index request' do
     context 'happy path' do
       it 'finds the associated merchant with the item id' do
