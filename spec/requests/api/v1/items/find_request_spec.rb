@@ -13,6 +13,8 @@ RSpec.describe "Item Find" do
 
       expect(response).to be_successful
       expect(response.body).to include('baseBALL')
+      expect(response.body).to include('football')
+      expect(response.body).to include('tennis ball')
       expect(response.body).to_not include('basket')
     end
 
