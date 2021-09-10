@@ -7,4 +7,16 @@ class Invoice < ApplicationRecord
   has_many :merchants, through: :items
 
   validates :status, presence: true
+
+
+  def self.unshipped_potential_revenue(quantity)
+    joins(:invoice_items)
+    .joins(:transactions)
+    .select("invoices.id as id, sum(invoice_items.quantity * invoice_items.unit_price) as potential_revenue")
+    .where('transactions.result = ?', 'success')
+    .where.not(status: 'shipped')
+    .group(:id)
+    .order("potential_revenue DESC")
+    .limit(quantity)
+  end
 end
