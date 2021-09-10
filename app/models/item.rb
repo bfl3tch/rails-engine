@@ -35,7 +35,7 @@ class Item < ApplicationRecord
      where('unit_price >= ?', "#{min}")
     .where('unit_price <= ?', "#{max}").order(:name).first
   end
-  
+
   def self.rank_by_revenue(quantity)
     select('items.*, sum(invoice_items.quantity * invoice_items.unit_price) as revenue')
     .joins('INNER JOIN invoice_items on items.id = invoice_items.item_id')
@@ -43,8 +43,8 @@ class Item < ApplicationRecord
     .joins('INNER JOIN transactions on invoices.id = transactions.invoice_id')
     .where('transactions.result = ?', 'success')
     .where('invoices.status = ?', 'shipped')
-    .group(:id)
-    .order(revenue: :desc)
+    .group('id')
+    .order('revenue desc')
     .limit(quantity)
   end
 end
