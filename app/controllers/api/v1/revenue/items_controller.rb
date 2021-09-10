@@ -1,22 +1,20 @@
 class Api::V1::Revenue::ItemsController < ApplicationController
-  # before_action :set_merchant, only: [:show]
+  before_action :set_item, only: [:index]
 
   def index
-  #   per_page = MerchantsFacade.per_page(params[:per_page])
-  #   page = MerchantsFacade.page(params[:page])
-  #   merchants = MerchantsFacade.fetch_requested_merchants(per_page, page)
-  #   json_response(MerchantSerializer.new(merchants), status)
+    @item_revenue ? json_response(ItemRevenueSerializer.new(@item_revenue)) : json_response(ErrorItemSerializer.new(@error_merchant), :bad_request)
   end
-  #
-  # def show
-  #   json_response(MerchantSerializer.new(@merchant), status) if @merchant
-  #   json_response(ErrorMerchantSerializer.new(@error_merchant), :not_found) if @merchant.nil?
-  # end
-  #
-  # private
-  #
-  # # def set_merchant
-  #   @merchant = Merchant.find_by_id(params[:id])
-  #   @error_merchant = ErrorMerchant.new("No merchant found with that ID") if @merchant.nil?
-  # end
+
+  private
+
+  def set_item
+    if params[:quantity] && params[:quantity].to_i <= 0
+      @error_merchant = ErrorMerchant.new("Quantity cannot be negative")
+    elsif params[:quantity] && params[:quantity].to_i > 0
+      quantity = params[:quantity]
+    elsif params[:quantity].nil?
+      quantity = 10
+    end
+    @item_revenue = ItemsFacade.rank_items_by_revenue(quantity) if quantity
+  end
 end
