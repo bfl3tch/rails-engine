@@ -9,8 +9,7 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def show
-    json_response(MerchantSerializer.new(@merchant), status) if @merchant
-    json_response(ErrorMerchantSerializer.new(@error_merchant), :not_found) if @merchant.nil?
+    @merchant ? json_response(MerchantSerializer.new(@merchant)) : json_response(ErrorMerchantSerializer.new(@error_merchant), :not_found)
   end
 
   private
