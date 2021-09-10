@@ -16,7 +16,7 @@ RSpec.describe "Item Find" do
       expect(response.body).to_not include('basket')
     end
 
-    it 'returns a 404 if nothing is found' do
+    it 'returns an error if nothing is found' do
       merchant = create(:merchant, id: 1)
       create(:item, name: "hike", merchant: merchant)
       create(:item, name: "bike", merchant: merchant)
@@ -29,7 +29,7 @@ RSpec.describe "Item Find" do
       expect(response.status).to eq(400)
     end
 
-    it 'returns a 404 if nothing is searched for' do
+    it 'returns an error if nothing is searched for' do
       merchant = create(:merchant, id: 1)
       create(:item, name: "basket", merchant: merchant)
       create(:item, name: "baseBALL", merchant: merchant)
@@ -55,7 +55,7 @@ RSpec.describe "Item Find" do
       expect(response.body).to_not include('fsomething')
     end
 
-    it 'responds with a 404 error if min price has no match' do
+    it 'responds with an error if min price has no match' do
       merchant = create(:merchant, id: 1)
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
@@ -83,7 +83,7 @@ RSpec.describe "Item Find" do
       expect(response.body).to_not include('fsomething')
     end
 
-    it 'responds with a 404 error if max price has no match' do
+    it 'responds with an error if max price has no match' do
       merchant = create(:merchant, id: 1)
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
@@ -111,7 +111,7 @@ RSpec.describe "Item Find" do
       expect(response.body).to_not include('fsomething')
     end
 
-    it 'returns a 404 if you try to search both name and min price' do
+    it 'returns an error if you try to search both name and min price' do
       merchant = create(:merchant, id: 1)
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
@@ -123,7 +123,7 @@ RSpec.describe "Item Find" do
       expect(response.status).to eq(400)
     end
 
-    it 'returns a 404 if you try to search both name and max price' do
+    it 'returns an error if you try to search both name and max price' do
       merchant = create(:merchant, id: 1)
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
@@ -135,7 +135,7 @@ RSpec.describe "Item Find" do
       expect(response.status).to eq(400)
     end
 
-    it 'returns a 404 if you try to search both name and min AND max price' do
+    it 'returns an error if you try to search both name and min AND max price' do
       merchant = create(:merchant, id: 1)
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)

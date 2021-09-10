@@ -7,7 +7,7 @@ class Api::V1::ItemsController < ApplicationController
     per_page = ItemsFacade.per_page(params[:per_page])
     page = ItemsFacade.page(params[:page])
     items = ItemsFacade.fetch_requested_items(per_page, page)
-    json_response(ItemSerializer.new(items), status)
+    json_response(ItemSerializer.new(items))
   end
 
   def show
