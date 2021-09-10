@@ -26,4 +26,8 @@ class ItemsFacade
   def self.both_price_search(min, max)
     Item.search_via_both_prices(min, max)
   end
+
+  def self.rank_items_by_revenue(quantity)
+    Item.rank_by_revenue(quantity)
+  end
 end
