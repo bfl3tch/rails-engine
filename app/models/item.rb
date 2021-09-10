@@ -18,21 +18,33 @@ class Item < ApplicationRecord
   end
 
   def self.case_insensitive_search(search)
-    where("lower(name) ILIKE ?", "%#{search.downcase}%")
+     where("lower(name) ILIKE ?", "%#{search.downcase}%")
     .order(:name)
     .first
   end
 
   def self.search_via_min_price(price)
-    Item.where('unit_price >= ?', "#{price}").order(:name).first
+    where('unit_price >= ?', "#{price}").order(:name).first
   end
 
   def self.search_via_max_price(price)
-    Item.where('unit_price <= ?', "#{price}").order(:name).first
+    where('unit_price <= ?', "#{price}").order(:name).first
   end
 
   def self.search_via_both_prices(min, max)
-    Item.where('unit_price >= ?', "#{min}")
+     where('unit_price >= ?', "#{min}")
     .where('unit_price <= ?', "#{max}").order(:name).first
+  end
+  
+  def self.rank_by_revenue(quantity)
+    select('items.*, sum(invoice_items.quantity * invoice_items.unit_price) as revenue')
+    .joins('INNER JOIN invoice_items on items.id = invoice_items.item_id')
+    .joins('INNER JOIN invoices on invoice_items.invoice_id = invoices.id')
+    .joins('INNER JOIN transactions on invoices.id = transactions.invoice_id')
+    .where('transactions.result = ?', 'success')
+    .where('invoices.status = ?', 'shipped')
+    .group(:id)
+    .order(revenue: :desc)
+    .limit(quantity)
   end
 end
