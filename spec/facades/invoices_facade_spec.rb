@@ -23,7 +23,7 @@ RSpec.describe InvoicesFacade do
         transaction_1 = create(:transaction, invoice: invoice_1, result: 'success')
         transaction_2 = create(:transaction, invoice: invoice_2, result: 'success')
 
-        expect(InvoicesFacade.rank_by_potential_revenue(1).first).to eq(invoice_3)
+        expect(InvoicesFacade.rank_by_potential_revenue(1).first).to eq(invoice_1)
       end
     end
   end
