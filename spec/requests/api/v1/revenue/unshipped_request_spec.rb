@@ -29,7 +29,7 @@ RSpec.describe 'Revenue Unshipped Controller' do
         results = JSON.parse(response.body, symbolize_names: true)
         expect(response).to be_successful
         expect(results[:data][0][:type]).to eq("unshipped_order")
-        expect(results[:data].count).to eq(3)
+        expect(results[:data].count).to eq(2)
       end
 
       it 'returns the invoices ranked by potential revenue and specifies how many to return' do
