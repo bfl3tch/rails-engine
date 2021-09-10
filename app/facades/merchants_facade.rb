@@ -14,4 +14,8 @@ class MerchantsFacade
   def self.search_by_name(search)
     Merchant.find_by_name(search)
   end
+
+  def self.most_revenue_ranked(search)
+    Merchant.most_revenue(search)
+  end
 end

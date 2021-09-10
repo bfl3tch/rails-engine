@@ -7,11 +7,6 @@ class Api::V1::Items::FindController < ApplicationController
     json_response(UnfoundItemSerializer.new(@bad_item), :bad_request) if @item.nil? && @error_item.nil?
   end
 
-# distinguish between nil items
-# helper method to differentiate
-# query param not being valid is different than a search returning nothing
-# empty result set should be different than a parameter invalid check
-# helper method for query params checker
   private
 
   def set_item
@@ -20,6 +15,7 @@ class Api::V1::Items::FindController < ApplicationController
     max = params[:max_price].to_i if params[:max_price]
 
     @bad_item = ErrorItem.new("No items in that price range") if (min && min > 10000)
+
     @error_item = ErrorItem.new("Price Below Zero") if (max && max < 0) || (min && min < 0)
     @error_item = ErrorItem.new("Unable to process request") if name && (min.present? || max.present?)
     @error_item = ErrorItem.new("No match for that name") if (name && ItemsFacade.item_search(name).nil?)

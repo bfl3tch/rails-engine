@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-
-  # get '/api/v1/items/find', to: '/api/v1/items/find#index'
-
   namespace :api do
    namespace :v1 do
      get '/items/find', to: 'items/find#index'
@@ -12,14 +9,11 @@ Rails.application.routes.draw do
      resources :items, except: [:new, :edit] do
        resources :merchant, module: :items, only: [:index]
      end
-     # namespace :items do
-     #   resources :find_all, module: :items, only: [:index]
-     #   resources :find, module: :items, only: [:index]
-     # end
-     # namespace :merchants do
-     #   resources :find_all, module: :merchants, only: [:index]
-     #   resources :find, module: :merchants, only: [:index]
-     # end
+     namespace :revenue do
+       resources :merchants, only: [:index, :show]
+       resources :items, only: [:index]
+       resources :unshipped, only: [:index]
+     end
     end
   end
 end
