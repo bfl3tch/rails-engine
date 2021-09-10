@@ -9,6 +9,7 @@ class Api::V1::Revenue::UnshippedController < ApplicationController
 
   def get_revenue
     if params[:quantity] && params[:quantity].to_i <= 0
+      @error_merchant = ErrorMerchant.new("Quantity cannot be negative")
       json_response(ErrorMerchantSerializer.new(@error_merchant), :bad_request)
     elsif params[:quantity] && params[:quantity].to_i > 0
       quantity = params[:quantity]
