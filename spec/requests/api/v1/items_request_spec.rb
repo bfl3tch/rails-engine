@@ -49,6 +49,17 @@ RSpec.describe "Items" do
         expect(response).to be_successful
         expect(items["data"].count).to eq(30)
       end
+
+      it 'sends a list back of less than 20 items if requested' do
+        merchant = create(:merchant)
+        create_list(:item, 30, merchant: merchant)
+
+        get '/api/v1/items?per_page=10'
+        items = JSON.parse(response.body)
+
+        expect(response).to be_successful
+        expect(items["data"].count).to eq(10)
+      end
     end
 
     context 'with only page params' do
