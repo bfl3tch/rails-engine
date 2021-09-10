@@ -7,7 +7,6 @@ RSpec.describe "Merchants API" do
         create_list(:merchant, 3)
 
         get '/api/v1/merchants'
-
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -17,8 +16,8 @@ RSpec.describe "Merchants API" do
 
       it 'sents a list of 20 back if there are more than 20' do
         create_list(:merchant, 21)
-        get '/api/v1/merchants'
 
+        get '/api/v1/merchants'
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -31,7 +30,6 @@ RSpec.describe "Merchants API" do
         create_list(:merchant, 30)
 
         get '/api/v1/merchants?per_page=25'
-
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -42,7 +40,6 @@ RSpec.describe "Merchants API" do
         create_list(:merchant, 30)
 
         get '/api/v1/merchants?per_page=50'
-
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -56,7 +53,6 @@ RSpec.describe "Merchants API" do
         create_list(:merchant, 30)
 
         get '/api/v1/merchants?page=1'
-
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -67,7 +63,6 @@ RSpec.describe "Merchants API" do
         create_list(:merchant, 30)
 
         get '/api/v1/merchants?page=2'
-
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -78,7 +73,6 @@ RSpec.describe "Merchants API" do
         create_list(:merchant, 30)
 
         get '/api/v1/merchants?page=5'
-
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -92,7 +86,6 @@ RSpec.describe "Merchants API" do
         create_list(:merchant, 30)
 
         get '/api/v1/merchants?per_page=25&page=1'
-
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -104,7 +97,6 @@ RSpec.describe "Merchants API" do
         create_list(:merchant, 50)
 
         get '/api/v1/merchants?per_page=20&page=3'
-
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -115,7 +107,6 @@ RSpec.describe "Merchants API" do
         create_list(:merchant, 30)
 
         get '/api/v1/merchants?per_page=50&page=1'
-
         merchants = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -130,8 +121,8 @@ RSpec.describe "Merchants API" do
         merchant = Merchant.create!(name: 'Kramer')
 
         get "/api/v1/merchants/#{merchant.id}"
-
         merchant = JSON.parse(response.body)
+        
         expect(response).to be_successful
         expect(merchant["data"]["attributes"]["name"]).to eq("Kramer")
       end
@@ -140,7 +131,7 @@ RSpec.describe "Merchants API" do
     context 'sad path' do
       it 'responds to bad queries with a 404' do
         merchant = Merchant.create!(name: 'Kramer')
-        
+
         get "/api/v1/merchants/#{merchant.id + 1}"
 
         expect(response.body).to include("No merchant found with that ID")

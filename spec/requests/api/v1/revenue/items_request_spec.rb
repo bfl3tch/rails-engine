@@ -26,8 +26,8 @@ RSpec.describe 'Revenue Unshipped Controller' do
         transaction_3 = create(:transaction, invoice: invoice_3, result: 'success')
 
         get '/api/v1/revenue/items'
-
         results = JSON.parse(response.body, symbolize_names: true)
+
         expect(response).to be_successful
         expect(results[:data][0][:type]).to eq("item_revenue")
         expect(results[:data].count).to eq(3)
@@ -55,8 +55,8 @@ RSpec.describe 'Revenue Unshipped Controller' do
         transaction_2 = create(:transaction, invoice: invoice_2, result: 'success')
 
         get '/api/v1/revenue/items?quantity=2'
-
         results = JSON.parse(response.body, symbolize_names: true)
+
         expect(response).to be_successful
         expect(results[:data][0][:type]).to eq("item_revenue")
         expect(results[:data].count).to eq(2)

@@ -8,6 +8,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "baseBALL", merchant: merchant)
       create(:item, name: "football", merchant: merchant)
       create(:item, name: "tennis ball", merchant: merchant)
+
       get '/api/v1/items/find?name=ball'
 
       expect(response).to be_successful
@@ -21,6 +22,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "bike", merchant: merchant)
       create(:item, name: "snow", merchant: merchant)
       create(:item, name: "skate", merchant: merchant)
+
       get '/api/v1/items/find?name=ball'
 
       expect(response).to_not be_successful
@@ -33,6 +35,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "baseBALL", merchant: merchant)
       create(:item, name: "football", merchant: merchant)
       create(:item, name: "tennis ball", merchant: merchant)
+
       get '/api/v1/items/find?'
 
       expect(response).to_not be_successful
@@ -44,6 +47,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
       create(:item, name: "fsomething", merchant: merchant, unit_price: 3)
+
       get '/api/v1/items/find?min_price=2'
 
       expect(response.body).to include('asomething')
@@ -56,6 +60,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
       create(:item, name: "fsomething", merchant: merchant, unit_price: 3)
+
       get '/api/v1/items/find?min_price=4'
 
       expect(response).to_not be_successful
@@ -70,6 +75,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
       create(:item, name: "fsomething", merchant: merchant, unit_price: 3)
+
       get '/api/v1/items/find?max_price=4'
 
       expect(response.body).to include('asomething')
@@ -82,6 +88,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
       create(:item, name: "fsomething", merchant: merchant, unit_price: 3)
+
       get '/api/v1/items/find?max_price=2'
 
       expect(response).to_not be_successful
@@ -96,6 +103,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
       create(:item, name: "fsomething", merchant: merchant, unit_price: 3)
+
       get '/api/v1/items/find?min_price=2&max_price=4'
 
       expect(response.body).to include('asomething')
@@ -108,6 +116,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
       create(:item, name: "fsomething", merchant: merchant, unit_price: 3)
+
       get '/api/v1/items/find?name=something&min_price=2'
 
       expect(response).to_not be_successful
@@ -119,6 +128,7 @@ RSpec.describe "Item Find API" do
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
       create(:item, name: "fsomething", merchant: merchant, unit_price: 3)
+
       get '/api/v1/items/find?name=something&max_price=4'
 
       expect(response).to_not be_successful
@@ -130,58 +140,11 @@ RSpec.describe "Item Find API" do
       create(:item, name: "jsomething", merchant: merchant, unit_price: 3)
       create(:item, name: "asomething", merchant: merchant, unit_price: 3)
       create(:item, name: "fsomething", merchant: merchant, unit_price: 3)
+      
       get '/api/v1/items/find?name=something&min_price=2&max_price=4'
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
-    end
-  end
-
-  describe 'show request' do
-    it 'returns all merchants if they have partial matches to the search case insensitive' do
-      merchant1 = create(:merchant, name: 'Joe')
-      merchant2 = create(:merchant, name: 'joe')
-      merchant3 = create(:merchant, name: 'Joel')
-      merchant4 = create(:merchant, name: 'joelneville')
-      merchant5 = create(:merchant, name: 'bob')
-
-      get '/api/v1/merchants/find_all?name=joe'
-
-      expect(response).to be_successful
-      expect(response.status).to eq(200)
-      expect(response.body).to include(merchant1.name)
-      expect(response.body).to include(merchant2.name)
-      expect(response.body).to include(merchant3.name)
-      expect(response.body).to include(merchant4.name)
-      expect(response.body).to_not include(merchant5.name)
-    end
-
-    it 'returns empty dataset if no params are given' do
-      merchant1 = create(:merchant, name: 'Joe')
-      merchant2 = create(:merchant, name: 'joe')
-      merchant3 = create(:merchant, name: 'Joel')
-      merchant4 = create(:merchant, name: 'joelneville')
-      merchant5 = create(:merchant, name: 'bob')
-
-      get '/api/v1/merchants/find_all'
-
-      expect(response).to be_successful
-      expect(response.status).to eq(204)
-      expect(response.body).to eq("")
-    end
-
-    it 'returns empty dataset array if unmatching params are given' do
-      merchant1 = create(:merchant, name: 'Joe')
-      merchant2 = create(:merchant, name: 'joe')
-      merchant3 = create(:merchant, name: 'Joel')
-      merchant4 = create(:merchant, name: 'joelneville')
-      merchant5 = create(:merchant, name: 'bob')
-
-      get '/api/v1/merchants/find_all?name=marinatedsteak'
-
-      expect(response).to be_successful
-      expect(response.status).to eq(200)
-      expect(response.body).to eq("{\"data\":[]}")
     end
   end
 end

@@ -8,7 +8,6 @@ class Invoice < ApplicationRecord
 
   validates :status, presence: true
 
-
   def self.unshipped_potential_revenue(quantity)
     joins(:invoice_items)
     .joins(:transactions)

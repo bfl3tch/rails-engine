@@ -8,7 +8,6 @@ RSpec.describe "Items API" do
         create_list(:item, 3, merchant: merchant)
 
         get '/api/v1/items'
-
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -19,8 +18,8 @@ RSpec.describe "Items API" do
       it 'sents a list of 20 back if there are more than 20' do
         merchant = create(:merchant)
         create_list(:item, 21, merchant: merchant)
-        get '/api/v1/items'
 
+        get '/api/v1/items'
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -34,7 +33,6 @@ RSpec.describe "Items API" do
         create_list(:item, 30, merchant: merchant)
 
         get '/api/v1/items?per_page=25'
-
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -46,7 +44,6 @@ RSpec.describe "Items API" do
         create_list(:item, 30, merchant: merchant)
 
         get '/api/v1/items?per_page=50'
-
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -60,7 +57,6 @@ RSpec.describe "Items API" do
         create_list(:item, 30, merchant: merchant)
 
         get '/api/v1/items?page=1'
-
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -72,7 +68,6 @@ RSpec.describe "Items API" do
         create_list(:item, 30, merchant: merchant)
 
         get '/api/v1/items?page=2'
-
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -84,7 +79,6 @@ RSpec.describe "Items API" do
         create_list(:item, 30, merchant: merchant)
 
         get '/api/v1/items?page=5'
-
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -98,7 +92,6 @@ RSpec.describe "Items API" do
         create_list(:item, 30, merchant: merchant)
 
         get '/api/v1/items?per_page=25&page=1'
-
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -111,7 +104,6 @@ RSpec.describe "Items API" do
         create_list(:item, 50, merchant: merchant)
 
         get '/api/v1/items?per_page=20&page=3'
-
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -123,7 +115,6 @@ RSpec.describe "Items API" do
         create_list(:item, 30, merchant: merchant)
 
         get '/api/v1/items?per_page=50&page=1'
-
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -134,7 +125,6 @@ RSpec.describe "Items API" do
         merchant = create(:merchant)
         create_list(:item, 21, merchant: merchant)
         get '/api/v1/items?per_page=10&page=1'
-
         items = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -188,8 +178,8 @@ RSpec.describe "Items API" do
         expect(Item.all.count).to eq(0)
         post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
 
-        expect(response.status).to eq(201)
         expect(Item.all.count).to eq(1)
+        expect(response.status).to eq(201)
         expect(Item.all.last.name).to eq("Fake new item")
         expect(Item.all.last.merchant_id).to eq(1)
       end
@@ -212,8 +202,8 @@ RSpec.describe "Items API" do
         expect(Item.all.count).to eq(0)
         post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
 
-        expect(response.status).to eq(400)
         expect(Item.all.count).to eq(0)
+        expect(response.status).to eq(400)
       end
     end
   end
@@ -236,7 +226,6 @@ RSpec.describe "Items API" do
         headers = {"CONTENT_TYPE" => "application/json"}
 
         put "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: item_params)
-
         updated_item = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -255,9 +244,8 @@ RSpec.describe "Items API" do
             }
           )
         headers = {"CONTENT_TYPE" => "application/json"}
-        # require "pry"; binding.pry
-        put "/api/v1/items/1", headers: headers, params: JSON.generate(item: item_params)
 
+        put "/api/v1/items/1", headers: headers, params: JSON.generate(item: item_params)
         updated_item = JSON.parse(response.body)
 
         expect(response).to be_successful
@@ -277,9 +265,8 @@ RSpec.describe "Items API" do
             }
           )
         headers = {"CONTENT_TYPE" => "application/json"}
-        # require "pry"; binding.pry
-        put "/api/v1/items/1", headers: headers, params: JSON.generate(item: item_params)
 
+        put "/api/v1/items/1", headers: headers, params: JSON.generate(item: item_params)
         updated_item = JSON.parse(response.body)
 
         expect(response).to_not be_successful
@@ -304,6 +291,7 @@ RSpec.describe "Items API" do
         headers = {"CONTENT_TYPE" => "application/json"}
 
         put "/api/v1/items/2", headers: headers, params: JSON.generate(item: item_params)
+
         expect(response.body).to include('No item found with that ID')
         expect(response.status).to eq(404)
       end
@@ -325,6 +313,7 @@ RSpec.describe "Items API" do
         headers = {"CONTENT_TYPE" => "application/json"}
 
         put "/api/v1/items/1", headers: headers, params: JSON.generate(item: item_params)
+        
         expect(response.body).to include("Merchant ID must match an existing Merchant")
         expect(response.status).to eq(404)
       end

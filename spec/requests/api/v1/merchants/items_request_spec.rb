@@ -9,9 +9,9 @@ RSpec.describe "Merchant Items API" do
         item2 = create(:item, merchant: merchant)
         item3 = create(:item, merchant: merchant)
 
-
         get '/api/v1/merchants/1/items'
         merchant = JSON.parse(response.body)
+
         expect(response).to be_successful
         expect(merchant.class).to eq(Hash)
       end
@@ -26,6 +26,7 @@ RSpec.describe "Merchant Items API" do
 
         get '/api/v1/merchants/2/items'
 
+        expect(response).to_not be_successful
         expect(response.status).to eq(404)
       end
     end

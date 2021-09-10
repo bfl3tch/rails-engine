@@ -56,7 +56,6 @@ RSpec.describe 'Revenue Merchants Controller' do
       transaction_2 = create(:transaction, invoice: invoice_2, result: 'success')
 
       get '/api/v1/revenue/merchants/1'
-
       results = JSON.parse(response.body)
 
       expect(response).to be_successful
@@ -67,8 +66,8 @@ RSpec.describe 'Revenue Merchants Controller' do
       merchant_1 = create(:merchant, id: 1)
 
       get '/api/v1/revenue/merchants/2'
-
       results = JSON.parse(response.body, symbolize_names: true)
+      
       expect(response).to_not be_successful
       expect(response.status).to eq(404)
       expect(results.keys).to include(:error_message)
