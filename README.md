@@ -50,6 +50,7 @@ Technical objectives:
   Please reference the [Endpoint Utilization Reference Site](https://mock-api-reference.herokuapp.com/) for full details
   
   ![List](https://user-images.githubusercontent.com/74567704/132939587-b291388c-a35b-46f7-afb2-0966de4757ee.png)
+  ![Example Output](https://user-images.githubusercontent.com/74567704/132939695-de5ab1db-c429-475e-b6d7-4dc04d533e43.png)
   
   </div>
   
