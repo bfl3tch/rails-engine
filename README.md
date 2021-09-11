@@ -23,6 +23,8 @@
   ## Table of Contents
 
   - [Overview](#overview)
+  - [Examples](#examples)
+  - [Schema](#schema)
   - [Tools Utilized](#tools-used)
   - [Contributing](#contributors)
   - [Setup](#setup)
@@ -42,20 +44,68 @@ Technical objectives:
   - ⭐ Write basic SQL statements without the assistance of an ORM
   - ⭐ Deploy to Heroku
 
-
+  <div align="center">
+  
+  ### <ins align="center">Examples</ins>
+  Please reference the [Endpoint Utilization Reference Site](https://mock-api-reference.herokuapp.com/) for full details
+  
+  ![List](https://user-images.githubusercontent.com/74567704/132939587-b291388c-a35b-46f7-afb2-0966de4757ee.png)
+  
+  </div>
+  
+   <div align="center">
+  
+### <ins align="center">Schema</ins>
+  
   ![Schema Layout](https://user-images.githubusercontent.com/74567704/131949086-49b88944-ed27-4b15-824c-432c3c9546dd.png)
+  
 
   [Technical Requirements](https://backend.turing.edu/module3/projects/rails_engine/requirements)
 
   ### <ins>Tools Used</ins>
 
+#### <ins>Framework</ins>
+<p>
+  <img src="https://img.shields.io/badge/Ruby%20On%20Rails-b81818.svg?&style=flat&logo=rubyonrails&logoColor=white" />
+</p>
 
+#### Languages
+<p>
+  <img src="https://img.shields.io/badge/Ruby-CC0000.svg?&style=flaste&logo=ruby&logoColor=white" />
+  <img src="https://img.shields.io/badge/ActiveRecord-CC0000.svg?&style=flaste&logo=rubyonrails&logoColor=white" />
+  <img src="https://img.shields.io/badge/SQL-CC0000.svg?&style=flaste&logo=SQL&logoColor=white" />
+</p>
 
+#### Tools
+<p>
+  <img src="https://img.shields.io/badge/Atom-66595C.svg?&style=flaste&logo=atom&logoColor=white" />  
+  <img src="https://img.shields.io/badge/Git-F05032.svg?&style=flaste&logo=git&logoColor=white" />
+  <img src="https://img.shields.io/badge/GitHub-181717.svg?&style=flaste&logo=github&logoColor=white" />
+  </br>
+  <img src="https://img.shields.io/badge/Postman-f74114.svg?&style=flat&logo=postman&logoColor=white" />
+  <img src="https://img.shields.io/badge/Heroku-430098.svg?&style=flaste&logo=heroku&logoColor=white" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1.svg?&style=flaste&logo=postgresql&logoColor=white" />
+</p>
 
+#### Gems
+<p>
+  <img src="https://img.shields.io/badge/rspec-b81818.svg?&style=flaste&logo=rubygems&logoColor=white" />
+  <img src="https://img.shields.io/badge/pry-b81818.svg?&style=flaste&logo=rubygems&logoColor=white" />  
+  <img src="https://img.shields.io/badge/simplecov-b81818.svg?&style=flaste&logo=rubygems&logoColor=white" />  
+  <img src="https://img.shields.io/badge/factory--bot-b81818.svg?&style=flaste&logo=rubygems&logoColor=white" />
+  </br>
+  <img src="https://img.shields.io/badge/faker-b81818.svg?&style=flaste&logo=rubygems&logoColor=white" />  
+  <img src="https://img.shields.io/badge/database--cleaner-b81818.svg?&style=flaste&logo=rubygems&logoColor=white" />
+  <img src="https://img.shields.io/badge/rubocop-b81818.svg?&style=flaste&logo=rubygems&logoColor=white" />
+</p>
 
-
-
-
+#### Development Principles
+<p>
+  <img src="https://img.shields.io/badge/OOP-b81818.svg?&style=flaste&logo=OOP&logoColor=white" />
+  <img src="https://img.shields.io/badge/TDD-b87818.svg?&style=flaste&logo=TDD&logoColor=white" />
+  <img src="https://img.shields.io/badge/MVC-b8b018.svg?&style=flaste&logo=MVC&logoColor=white" />
+  <img src="https://img.shields.io/badge/REST-33b818.svg?&style=flaste&logo=REST&logoColor=white" />  
+</p>
 
 
   ### <ins>Contributors</ins>
@@ -75,7 +125,7 @@ Technical objectives:
   [issues-shield]: https://img.shields.io/github/issues/bfl3tch/rails-engine.svg?style=flat-square
   [issues-url]: https://github.com/bfl3tch/rails-engine/issues
   
-   * [Reference Site](https://mock-api-reference.herokuapp.com/), for list of endpoints and how to utilize in production
+</div>
 
   ## <ins>Setup</ins>
 
