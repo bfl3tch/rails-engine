@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(version: 2021_09_03_033212) do
   end
 
   create_table "invoices", force: :cascade do |t|
+    t.string "status"
     t.bigint "customer_id"
     t.bigint "merchant_id"
-    t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["customer_id"], name: "index_invoices_on_customer_id"
